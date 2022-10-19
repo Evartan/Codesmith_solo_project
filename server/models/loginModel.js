@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 require("mongoose-type-url");
 
-const MONGO_URI =
-  "mongodb+srv://evartan:bangladesh@cluster0.mqxuhau.mongodb.net/?retryWrites=true&w=majority";
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose
   .connect(MONGO_URI, {
