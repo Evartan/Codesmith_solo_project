@@ -9,17 +9,13 @@ const LoginsContainer = (props) => {
 
     // logins array will be kept in state
     const [logins, setLogins] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [startingIndex, setStartingIndex] = useState(0);
     const [partialLogins, setPartialLogins] = useState([]);
 
-    const fetchLoginsHandler = useCallback(async () => {
+    const fetchLoginsHandler = async () => {
       console.log('fetch logins handler executed')
-      setIsLoading(true);
-      setError(null);
-      props.setUpdated(false)
-
       try {
         const response = await fetch("/api/", {
             method: "GET",
@@ -40,18 +36,19 @@ const LoginsContainer = (props) => {
      
       } catch (error) {
         setError(error.message);
-      } 
+      } finally {
       setIsLoading(false);
-      // put state here
-    }, [props.updated, startingIndex]);
+      props.setUpdated(false);
+      };
+    };
 
     console.log('logins state -> ', partialLogins)
 
     // use effect to grab logins array
     useEffect(() => {
-        console.log('useEffect runs')
-        fetchLoginsHandler();
-    }, [fetchLoginsHandler]);
+      console.log('useEffect runs');
+      fetchLoginsHandler();
+    }, [props.updated, startingIndex]);
 
     const handleIncrement = () => {
       setStartingIndex(prevIndex => {
